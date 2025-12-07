@@ -92,7 +92,7 @@ class TiSASRec(SequentialModel):
 
         # Self-attention
         # Use builtin int for dtype to avoid deprecated numpy aliases (np.int)
-        causality_mask = np.tril(np.ones((1, 1, seq_len, seq_len), dtype=int)) #修改了numpy的一些
+        causality_mask = np.tril(np.ones((1, 1, seq_len, seq_len), dtype=int))
         attn_mask = torch.from_numpy(causality_mask).to(self.device)
         # attn_mask = valid_his.view(batch_size, 1, 1, seq_len)
         for block in self.transformer_block:

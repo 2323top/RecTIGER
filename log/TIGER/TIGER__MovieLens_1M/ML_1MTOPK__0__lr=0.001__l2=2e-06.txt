@@ -1,0 +1,235 @@
+INFO:root:Namespace(model_name='TIGER', model_mode='')
+INFO:root:--------------------------------------------- BEGIN: 2025-12-05 09:47:39 ---------------------------------------------
+INFO:root:
+=============================================
+ Arguments            | Values               
+=============================================
+ batch_size           | 256                 
+ beam_size            | 30                  
+ codebook_k           | 256                 
+ d_ff                 | 1024                
+ d_kv                 | 64                  
+ d_model              | 128                 
+ data_appendix        |                     
+ dataset              | MovieLens_1M/ML_1...
+ dropout              | 0                   
+ dropout_rate         | 0.1                 
+ early_stop           | 10                  
+ eos_token_id         | 0                   
+ epoch                | 100                 
+ eval_batch_size      | 128                 
+ feed_forward_proj    | relu                
+ gpu                  | 0                   
+ history_max          | 10                  
+ l2                   | 2e-06               
+ lr                   | 0.001               
+ main_metric          |                     
+ max_len              | 20                  
+ num_codebooks        | 4                   
+ num_decoder_layers   | 4                   
+ num_heads            | 6                   
+ num_layers           | 2                   
+ num_neg              | 1                   
+ num_workers          | 5                   
+ optimizer            | Adam                
+ pad_token_id         | 0                   
+ random_seed          | 0                   
+ save_converted_codes | 1                   
+ save_final_results   | 1                   
+ test_all             | 0                   
+ tiger_code_path      |                     
+ topk                 | 5,10,20,50          
+ vocab_size           | 1025                
+=============================================
+INFO:root:Device: cuda
+INFO:root:Load corpus from ../data/MovieLens_1M/ML_1MTOPK/TIGERReader.pkl
+INFO:root:TIGER: using corpus.item_codes already present
+INFO:root:#params: 3941888
+INFO:root:TIGER(
+  (model): T5ForConditionalGeneration(
+    (shared): Embedding(3127, 128)
+    (encoder): T5Stack(
+      (embed_tokens): Embedding(3127, 128)
+      (block): ModuleList(
+        (0): T5Block(
+          (layer): ModuleList(
+            (0): T5LayerSelfAttention(
+              (SelfAttention): T5Attention(
+                (q): Linear(in_features=128, out_features=384, bias=False)
+                (k): Linear(in_features=128, out_features=384, bias=False)
+                (v): Linear(in_features=128, out_features=384, bias=False)
+                (o): Linear(in_features=384, out_features=128, bias=False)
+                (relative_attention_bias): Embedding(32, 6)
+              )
+              (layer_norm): FusedRMSNorm(torch.Size([128]), eps=1e-06, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+            (1): T5LayerFF(
+              (DenseReluDense): T5DenseActDense(
+                (wi): Linear(in_features=128, out_features=1024, bias=False)
+                (wo): Linear(in_features=1024, out_features=128, bias=False)
+                (dropout): Dropout(p=0.1, inplace=False)
+                (act): ReLU()
+              )
+              (layer_norm): FusedRMSNorm(torch.Size([128]), eps=1e-06, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+        )
+        (1): T5Block(
+          (layer): ModuleList(
+            (0): T5LayerSelfAttention(
+              (SelfAttention): T5Attention(
+                (q): Linear(in_features=128, out_features=384, bias=False)
+                (k): Linear(in_features=128, out_features=384, bias=False)
+                (v): Linear(in_features=128, out_features=384, bias=False)
+                (o): Linear(in_features=384, out_features=128, bias=False)
+              )
+              (layer_norm): FusedRMSNorm(torch.Size([128]), eps=1e-06, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+            (1): T5LayerFF(
+              (DenseReluDense): T5DenseActDense(
+                (wi): Linear(in_features=128, out_features=1024, bias=False)
+                (wo): Linear(in_features=1024, out_features=128, bias=False)
+                (dropout): Dropout(p=0.1, inplace=False)
+                (act): ReLU()
+              )
+              (layer_norm): FusedRMSNorm(torch.Size([128]), eps=1e-06, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+        )
+      )
+      (final_layer_norm): FusedRMSNorm(torch.Size([128]), eps=1e-06, elementwise_affine=True)
+      (dropout): Dropout(p=0.1, inplace=False)
+    )
+    (decoder): T5Stack(
+      (embed_tokens): Embedding(3127, 128)
+      (block): ModuleList(
+        (0): T5Block(
+          (layer): ModuleList(
+            (0): T5LayerSelfAttention(
+              (SelfAttention): T5Attention(
+                (q): Linear(in_features=128, out_features=384, bias=False)
+                (k): Linear(in_features=128, out_features=384, bias=False)
+                (v): Linear(in_features=128, out_features=384, bias=False)
+                (o): Linear(in_features=384, out_features=128, bias=False)
+                (relative_attention_bias): Embedding(32, 6)
+              )
+              (layer_norm): FusedRMSNorm(torch.Size([128]), eps=1e-06, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+            (1): T5LayerCrossAttention(
+              (EncDecAttention): T5Attention(
+                (q): Linear(in_features=128, out_features=384, bias=False)
+                (k): Linear(in_features=128, out_features=384, bias=False)
+                (v): Linear(in_features=128, out_features=384, bias=False)
+                (o): Linear(in_features=384, out_features=128, bias=False)
+              )
+              (layer_norm): FusedRMSNorm(torch.Size([128]), eps=1e-06, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+            (2): T5LayerFF(
+              (DenseReluDense): T5DenseActDense(
+                (wi): Linear(in_features=128, out_features=1024, bias=False)
+                (wo): Linear(in_features=1024, out_features=128, bias=False)
+                (dropout): Dropout(p=0.1, inplace=False)
+                (act): ReLU()
+              )
+              (layer_norm): FusedRMSNorm(torch.Size([128]), eps=1e-06, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+        )
+        (1-3): 3 x T5Block(
+          (layer): ModuleList(
+            (0): T5LayerSelfAttention(
+              (SelfAttention): T5Attention(
+                (q): Linear(in_features=128, out_features=384, bias=False)
+                (k): Linear(in_features=128, out_features=384, bias=False)
+                (v): Linear(in_features=128, out_features=384, bias=False)
+                (o): Linear(in_features=384, out_features=128, bias=False)
+              )
+              (layer_norm): FusedRMSNorm(torch.Size([128]), eps=1e-06, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+            (1): T5LayerCrossAttention(
+              (EncDecAttention): T5Attention(
+                (q): Linear(in_features=128, out_features=384, bias=False)
+                (k): Linear(in_features=128, out_features=384, bias=False)
+                (v): Linear(in_features=128, out_features=384, bias=False)
+                (o): Linear(in_features=384, out_features=128, bias=False)
+              )
+              (layer_norm): FusedRMSNorm(torch.Size([128]), eps=1e-06, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+            (2): T5LayerFF(
+              (DenseReluDense): T5DenseActDense(
+                (wi): Linear(in_features=128, out_features=1024, bias=False)
+                (wo): Linear(in_features=1024, out_features=128, bias=False)
+                (dropout): Dropout(p=0.1, inplace=False)
+                (act): ReLU()
+              )
+              (layer_norm): FusedRMSNorm(torch.Size([128]), eps=1e-06, elementwise_affine=True)
+              (dropout): Dropout(p=0.1, inplace=False)
+            )
+          )
+        )
+      )
+      (final_layer_norm): FusedRMSNorm(torch.Size([128]), eps=1e-06, elementwise_affine=True)
+      (dropout): Dropout(p=0.1, inplace=False)
+    )
+    (lm_head): Linear(in_features=128, out_features=3127, bias=False)
+  )
+)
+INFO:root:Test Before Training: (HR@5:0.0518,NDCG@5:0.0334,HR@10:0.0957,NDCG@10:0.0475,HR@20:0.1893,NDCG@20:0.0708,HR@50:0.5045,NDCG@50:0.1322)
+INFO:root:Optimizer: Adam
+INFO:root:Epoch 1     loss=2.7721 [49.5 s]	dev=(HR@5:0.0792,NDCG@5:0.0469) [16.9 s] *
+INFO:root:Epoch 2     loss=1.3701 [49.4 s]	dev=(HR@5:0.0820,NDCG@5:0.0484) [16.8 s] *
+INFO:root:Epoch 3     loss=1.3615 [49.6 s]	dev=(HR@5:0.0788,NDCG@5:0.0471) [17.3 s]
+INFO:root:Epoch 4     loss=1.3532 [49.4 s]	dev=(HR@5:0.0839,NDCG@5:0.0513) [16.8 s] *
+INFO:root:Epoch 5     loss=1.3450 [49.3 s]	dev=(HR@5:0.0824,NDCG@5:0.0501) [17.0 s]
+INFO:root:Epoch 6     loss=1.3365 [48.8 s]	dev=(HR@5:0.0882,NDCG@5:0.0532) [17.1 s] *
+INFO:root:Epoch 7     loss=1.3277 [49.1 s]	dev=(HR@5:0.0906,NDCG@5:0.0537) [17.0 s] *
+INFO:root:Epoch 8     loss=1.3205 [49.0 s]	dev=(HR@5:0.0894,NDCG@5:0.0543) [16.9 s] *
+INFO:root:Epoch 9     loss=1.3143 [49.4 s]	dev=(HR@5:0.1007,NDCG@5:0.0600) [16.9 s] *
+INFO:root:Epoch 10    loss=1.3090 [49.0 s]	dev=(HR@5:0.1050,NDCG@5:0.0616) [17.2 s] *
+INFO:root:Epoch 11    loss=1.3037 [48.7 s]	dev=(HR@5:0.1027,NDCG@5:0.0637) [17.0 s] *
+INFO:root:Epoch 12    loss=1.2997 [48.9 s]	dev=(HR@5:0.1050,NDCG@5:0.0637) [16.9 s] *
+INFO:root:Epoch 13    loss=1.2961 [48.8 s]	dev=(HR@5:0.0988,NDCG@5:0.0600) [17.2 s]
+INFO:root:Epoch 14    loss=1.2934 [48.9 s]	dev=(HR@5:0.1023,NDCG@5:0.0618) [17.0 s]
+INFO:root:Epoch 15    loss=1.2904 [49.1 s]	dev=(HR@5:0.1093,NDCG@5:0.0664) [17.4 s] *
+INFO:root:Epoch 16    loss=1.2881 [49.4 s]	dev=(HR@5:0.1073,NDCG@5:0.0650) [17.0 s]
+INFO:root:Epoch 17    loss=1.2854 [49.8 s]	dev=(HR@5:0.1030,NDCG@5:0.0641) [17.7 s]
+INFO:root:Epoch 18    loss=1.2831 [49.8 s]	dev=(HR@5:0.1054,NDCG@5:0.0631) [17.1 s]
+INFO:root:Epoch 19    loss=1.2811 [49.5 s]	dev=(HR@5:0.1171,NDCG@5:0.0696) [17.0 s] *
+INFO:root:Epoch 20    loss=1.2794 [49.6 s]	dev=(HR@5:0.1069,NDCG@5:0.0638) [17.3 s]
+INFO:root:Epoch 21    loss=1.2772 [50.0 s]	dev=(HR@5:0.1136,NDCG@5:0.0681) [17.4 s]
+INFO:root:Epoch 22    loss=1.2759 [50.0 s]	dev=(HR@5:0.1159,NDCG@5:0.0709) [17.1 s] *
+INFO:root:Epoch 23    loss=1.2742 [50.1 s]	dev=(HR@5:0.1081,NDCG@5:0.0632) [17.1 s]
+INFO:root:Epoch 24    loss=1.2728 [49.6 s]	dev=(HR@5:0.1159,NDCG@5:0.0705) [17.1 s]
+INFO:root:Epoch 25    loss=1.2711 [50.1 s]	dev=(HR@5:0.1253,NDCG@5:0.0754) [17.4 s] *
+INFO:root:Epoch 26    loss=1.2700 [49.4 s]	dev=(HR@5:0.1183,NDCG@5:0.0727) [17.2 s]
+INFO:root:Epoch 27    loss=1.2686 [50.0 s]	dev=(HR@5:0.1151,NDCG@5:0.0702) [17.1 s]
+INFO:root:Epoch 28    loss=1.2673 [50.2 s]	dev=(HR@5:0.1136,NDCG@5:0.0690) [17.1 s]
+INFO:root:Epoch 29    loss=1.2658 [49.5 s]	dev=(HR@5:0.1085,NDCG@5:0.0671) [17.3 s]
+INFO:root:Epoch 30    loss=1.2649 [49.2 s]	dev=(HR@5:0.1128,NDCG@5:0.0665) [17.5 s]
+INFO:root:Epoch 31    loss=1.2640 [49.6 s]	dev=(HR@5:0.1112,NDCG@5:0.0651) [17.0 s]
+INFO:root:Epoch 32    loss=1.2631 [49.7 s]	dev=(HR@5:0.1163,NDCG@5:0.0695) [17.5 s]
+INFO:root:Epoch 33    loss=1.2618 [49.4 s]	dev=(HR@5:0.1112,NDCG@5:0.0689) [17.8 s]
+INFO:root:Epoch 34    loss=1.2611 [49.4 s]	dev=(HR@5:0.1151,NDCG@5:0.0682) [17.0 s]
+INFO:root:Early stop at 34 based on dev result.
+INFO:root:
+Best Iter(dev)=   25	 dev=(HR@5:0.1253,NDCG@5:0.0754) [2266.1 s] 
+INFO:root:Load model from ../model/TIGER/TIGER__MovieLens_1M/ML_1MTOPK__0__lr=0.001__l2=2e-06.pt
+INFO:root:
+Dev  After Training: (HR@5:0.1253,NDCG@5:0.0754,HR@10:0.2037,NDCG@10:0.1005,HR@20:0.3318,NDCG@20:0.1324,HR@50:0.6659,NDCG@50:0.1980)
+INFO:root:
+Test After Training: (HR@5:0.1371,NDCG@5:0.0816,HR@10:0.2265,NDCG@10:0.1101,HR@20:0.3671,NDCG@20:0.1457,HR@50:0.6691,NDCG@50:0.2051)
+INFO:root:Saving top-100 recommendation results to: ../log/TIGER/TIGER__MovieLens_1M/ML_1MTOPK__0__lr=0/rec-TIGER-dev.csv
+INFO:root:dev Prediction results saved!
+INFO:root:Saving top-100 recommendation results to: ../log/TIGER/TIGER__MovieLens_1M/ML_1MTOPK__0__lr=0/rec-TIGER-test.csv
+INFO:root:test Prediction results saved!
+INFO:root:
+--------------------------------------------- END: 2025-12-05 10:27:02 ---------------------------------------------

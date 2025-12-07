@@ -1,0 +1,130 @@
+INFO:root:Namespace(model_name='GRU4Rec', model_mode='')
+INFO:root:--------------------------------------------- BEGIN: 2025-12-05 09:21:43 ---------------------------------------------
+INFO:root:
+===========================================
+ Arguments          | Values               
+===========================================
+ batch_size         | 256                 
+ data_appendix      |                     
+ dataset            | MovieLens_1M/ML_1...
+ dropout            | 0                   
+ early_stop         | 10                  
+ emb_size           | 64                  
+ epoch              | 200                 
+ eval_batch_size    | 256                 
+ gpu                | 0                   
+ hidden_size        | 100                 
+ history_max        | 20                  
+ l2                 | 0.0001              
+ lr                 | 0.001               
+ main_metric        |                     
+ num_neg            | 1                   
+ num_workers        | 5                   
+ optimizer          | Adam                
+ random_seed        | 0                   
+ save_final_results | 1                   
+ test_all           | 0                   
+ topk               | 5,10,20,50          
+===========================================
+INFO:root:Device: cpu
+INFO:root:Load corpus from ../data/MovieLens_1M/ML_1MTOPK/SeqReader.pkl
+INFO:root:#params: 256328
+INFO:root:GRU4Rec(
+  (i_embeddings): Embedding(3126, 64)
+  (rnn): GRU(64, 100, batch_first=True)
+  (out): Linear(in_features=100, out_features=64, bias=True)
+)
+INFO:root:Test Before Training: (HR@5:0.0452,NDCG@5:0.0267,HR@10:0.0971,NDCG@10:0.0432,HR@20:0.1917,NDCG@20:0.0668,HR@50:0.5136,NDCG@50:0.1297)
+INFO:root:Optimizer: Adam
+INFO:root:Early stop manually
+INFO:root:
+--------------------------------------------- END: 2025-12-05 09:23:18 ---------------------------------------------
+INFO:root:Namespace(model_name='GRU4Rec', model_mode='')
+INFO:root:--------------------------------------------- BEGIN: 2025-12-05 09:27:40 ---------------------------------------------
+INFO:root:
+===========================================
+ Arguments          | Values               
+===========================================
+ batch_size         | 256                 
+ data_appendix      |                     
+ dataset            | MovieLens_1M/ML_1...
+ dropout            | 0                   
+ early_stop         | 10                  
+ emb_size           | 64                  
+ epoch              | 200                 
+ eval_batch_size    | 256                 
+ gpu                | 0                   
+ hidden_size        | 100                 
+ history_max        | 20                  
+ l2                 | 0.0001              
+ lr                 | 0.001               
+ main_metric        |                     
+ num_neg            | 1                   
+ num_workers        | 5                   
+ optimizer          | Adam                
+ random_seed        | 0                   
+ save_final_results | 1                   
+ test_all           | 0                   
+ topk               | 5,10,20,50          
+===========================================
+INFO:root:Device: cuda
+INFO:root:Load corpus from ../data/MovieLens_1M/ML_1MTOPK/SeqReader.pkl
+INFO:root:#params: 256328
+INFO:root:GRU4Rec(
+  (i_embeddings): Embedding(3126, 64)
+  (rnn): GRU(64, 100, batch_first=True)
+  (out): Linear(in_features=100, out_features=64, bias=True)
+)
+INFO:root:Test Before Training: (HR@5:0.0452,NDCG@5:0.0267,HR@10:0.0971,NDCG@10:0.0432,HR@20:0.1917,NDCG@20:0.0668,HR@50:0.5136,NDCG@50:0.1297)
+INFO:root:Optimizer: Adam
+INFO:root:Epoch 1     loss=0.3087 [14.4 s]	dev=(HR@5:0.3849,NDCG@5:0.2565) [0.2 s] *
+INFO:root:Epoch 2     loss=0.2474 [13.4 s]	dev=(HR@5:0.3934,NDCG@5:0.2624) [0.1 s] *
+INFO:root:Epoch 3     loss=0.2212 [13.6 s]	dev=(HR@5:0.4165,NDCG@5:0.2872) [0.2 s] *
+INFO:root:Epoch 4     loss=0.2002 [13.3 s]	dev=(HR@5:0.4301,NDCG@5:0.2903) [0.1 s] *
+INFO:root:Epoch 5     loss=0.1823 [13.4 s]	dev=(HR@5:0.4551,NDCG@5:0.3115) [0.2 s] *
+INFO:root:Epoch 6     loss=0.1739 [13.4 s]	dev=(HR@5:0.4649,NDCG@5:0.3212) [0.1 s] *
+INFO:root:Epoch 7     loss=0.1684 [13.3 s]	dev=(HR@5:0.4699,NDCG@5:0.3230) [0.2 s] *
+INFO:root:Epoch 8     loss=0.1641 [13.4 s]	dev=(HR@5:0.4610,NDCG@5:0.3228) [0.2 s]
+INFO:root:Epoch 9     loss=0.1609 [13.4 s]	dev=(HR@5:0.4680,NDCG@5:0.3288) [0.2 s] *
+INFO:root:Epoch 10    loss=0.1582 [13.5 s]	dev=(HR@5:0.4680,NDCG@5:0.3251) [0.2 s]
+INFO:root:Epoch 11    loss=0.1557 [13.4 s]	dev=(HR@5:0.4778,NDCG@5:0.3304) [0.2 s] *
+INFO:root:Epoch 12    loss=0.1537 [13.7 s]	dev=(HR@5:0.4754,NDCG@5:0.3306) [0.1 s] *
+INFO:root:Epoch 13    loss=0.1510 [13.5 s]	dev=(HR@5:0.4715,NDCG@5:0.3317) [0.2 s] *
+INFO:root:Epoch 14    loss=0.1499 [13.7 s]	dev=(HR@5:0.4774,NDCG@5:0.3294) [0.2 s]
+INFO:root:Epoch 15    loss=0.1490 [13.4 s]	dev=(HR@5:0.4863,NDCG@5:0.3431) [0.2 s] *
+INFO:root:Epoch 16    loss=0.1482 [13.6 s]	dev=(HR@5:0.4856,NDCG@5:0.3419) [0.2 s]
+INFO:root:Epoch 17    loss=0.1465 [13.4 s]	dev=(HR@5:0.4863,NDCG@5:0.3398) [0.1 s]
+INFO:root:Epoch 18    loss=0.1452 [13.7 s]	dev=(HR@5:0.4859,NDCG@5:0.3400) [0.2 s]
+INFO:root:Epoch 19    loss=0.1448 [13.6 s]	dev=(HR@5:0.4785,NDCG@5:0.3323) [0.2 s]
+INFO:root:Epoch 20    loss=0.1448 [13.6 s]	dev=(HR@5:0.4778,NDCG@5:0.3358) [0.2 s]
+INFO:root:Epoch 21    loss=0.1433 [13.8 s]	dev=(HR@5:0.4926,NDCG@5:0.3434) [0.2 s] *
+INFO:root:Epoch 22    loss=0.1429 [13.6 s]	dev=(HR@5:0.4832,NDCG@5:0.3374) [0.2 s]
+INFO:root:Epoch 23    loss=0.1428 [13.7 s]	dev=(HR@5:0.4891,NDCG@5:0.3437) [0.2 s] *
+INFO:root:Epoch 24    loss=0.1421 [13.7 s]	dev=(HR@5:0.4883,NDCG@5:0.3397) [0.2 s]
+INFO:root:Epoch 25    loss=0.1417 [13.6 s]	dev=(HR@5:0.4953,NDCG@5:0.3491) [0.2 s] *
+INFO:root:Epoch 26    loss=0.1411 [13.6 s]	dev=(HR@5:0.4910,NDCG@5:0.3431) [0.2 s]
+INFO:root:Epoch 27    loss=0.1404 [13.7 s]	dev=(HR@5:0.4984,NDCG@5:0.3511) [0.2 s] *
+INFO:root:Epoch 28    loss=0.1404 [13.4 s]	dev=(HR@5:0.5051,NDCG@5:0.3520) [0.2 s] *
+INFO:root:Epoch 29    loss=0.1396 [13.3 s]	dev=(HR@5:0.4859,NDCG@5:0.3457) [0.2 s]
+INFO:root:Epoch 30    loss=0.1392 [13.3 s]	dev=(HR@5:0.4867,NDCG@5:0.3379) [0.2 s]
+INFO:root:Epoch 31    loss=0.1385 [13.3 s]	dev=(HR@5:0.4922,NDCG@5:0.3419) [0.2 s]
+INFO:root:Epoch 32    loss=0.1383 [13.3 s]	dev=(HR@5:0.4934,NDCG@5:0.3434) [0.2 s]
+INFO:root:Epoch 33    loss=0.1377 [13.3 s]	dev=(HR@5:0.4918,NDCG@5:0.3443) [0.2 s]
+INFO:root:Epoch 34    loss=0.1366 [13.4 s]	dev=(HR@5:0.4918,NDCG@5:0.3490) [0.2 s]
+INFO:root:Epoch 35    loss=0.1374 [13.4 s]	dev=(HR@5:0.4871,NDCG@5:0.3418) [0.2 s]
+INFO:root:Epoch 36    loss=0.1356 [13.3 s]	dev=(HR@5:0.4977,NDCG@5:0.3468) [0.1 s]
+INFO:root:Epoch 37    loss=0.1375 [13.2 s]	dev=(HR@5:0.4945,NDCG@5:0.3474) [0.1 s]
+INFO:root:Early stop at 37 based on dev result.
+INFO:root:
+Best Iter(dev)=   28	 dev=(HR@5:0.5051,NDCG@5:0.3520) [506.9 s] 
+INFO:root:Load model from ../model/GRU4Rec/GRU4Rec__MovieLens_1M/ML_1MTOPK__0__lr=0.001__l2=0.0001__emb_size=64__hidden_size=100.pt
+INFO:root:
+Dev  After Training: (HR@5:0.5051,NDCG@5:0.3520,HR@10:0.6530,NDCG@10:0.3997,HR@20:0.8087,NDCG@20:0.4392,HR@50:0.9516,NDCG@50:0.4680)
+INFO:root:
+Test After Training: (HR@5:0.4899,NDCG@5:0.3522,HR@10:0.6493,NDCG@10:0.4036,HR@20:0.8010,NDCG@20:0.4423,HR@50:0.9541,NDCG@50:0.4732)
+INFO:root:Saving top-100 recommendation results to: ../log/GRU4Rec/GRU4Rec__MovieLens_1M/ML_1MTOPK__0__lr=0/rec-GRU4Rec-dev.csv
+INFO:root:dev Prediction results saved!
+INFO:root:Saving top-100 recommendation results to: ../log/GRU4Rec/GRU4Rec__MovieLens_1M/ML_1MTOPK__0__lr=0/rec-GRU4Rec-test.csv
+INFO:root:test Prediction results saved!
+INFO:root:
+--------------------------------------------- END: 2025-12-05 09:36:12 ---------------------------------------------

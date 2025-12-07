@@ -1,0 +1,91 @@
+INFO:root:Namespace(model_name='TiSASRec', model_mode='')
+INFO:root:--------------------------------------------- BEGIN: 2025-10-28 15:54:01 ---------------------------------------------
+INFO:root:
+===========================================
+ Arguments          | Values               
+===========================================
+ batch_size         | 256                 
+ data_appendix      |                     
+ dataset            | Grocery_and_Gourm...
+ dropout            | 0                   
+ early_stop         | 10                  
+ emb_size           | 64                  
+ epoch              | 200                 
+ eval_batch_size    | 256                 
+ gpu                | 0                   
+ history_max        | 20                  
+ l2                 | 1e-06               
+ lr                 | 0.001               
+ main_metric        |                     
+ num_heads          | 4                   
+ num_layers         | 1                   
+ num_neg            | 1                   
+ num_workers        | 5                   
+ optimizer          | Adam                
+ random_seed        | 0                   
+ save_final_results | 1                   
+ test_all           | 0                   
+ time_max           | 512                 
+ topk               | 5,10,20,50          
+===========================================
+INFO:root:Device: cuda
+INFO:root:Reading data from "../data/", dataset = "Grocery_and_Gourmet_Food" 
+INFO:root:Counting dataset statistics...
+INFO:root:"# user": 14681, "# item": 8713, "# entry": 151254
+INFO:root:Appending history info...
+INFO:root:Save corpus to ../data/Grocery_and_Gourmet_Food/SeqReader.pkl
+INFO:root:#params: 647104
+INFO:root:TiSASRec(
+  (i_embeddings): Embedding(8714, 64)
+  (p_k_embeddings): Embedding(21, 64)
+  (p_v_embeddings): Embedding(21, 64)
+  (t_k_embeddings): Embedding(513, 64)
+  (t_v_embeddings): Embedding(513, 64)
+  (transformer_block): ModuleList(
+    (0): TimeIntervalTransformerLayer(
+      (masked_attn_head): TimeIntervalMultiHeadAttention(
+        (v_linear): Linear(in_features=64, out_features=64, bias=True)
+        (k_linear): Linear(in_features=64, out_features=64, bias=True)
+        (q_linear): Linear(in_features=64, out_features=64, bias=True)
+      )
+      (layer_norm1): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+      (dropout1): Dropout(p=0, inplace=False)
+      (linear1): Linear(in_features=64, out_features=64, bias=True)
+      (linear2): Linear(in_features=64, out_features=64, bias=True)
+      (layer_norm2): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+      (dropout2): Dropout(p=0, inplace=False)
+    )
+  )
+)
+INFO:root:Test Before Training: (HR@5:0.0526,NDCG@5:0.0311,HR@10:0.1070,NDCG@10:0.0485,HR@20:0.2058,NDCG@20:0.0731,HR@50:0.5057,NDCG@50:0.1316)
+INFO:root:Optimizer: Adam
+INFO:root:Epoch 1     loss=0.4689 [6.2 s]	dev=(HR@5:0.3502,NDCG@5:0.2418) [0.4 s] *
+INFO:root:Epoch 2     loss=0.3442 [5.5 s]	dev=(HR@5:0.3966,NDCG@5:0.2876) [0.4 s] *
+INFO:root:Epoch 3     loss=0.2477 [5.5 s]	dev=(HR@5:0.4150,NDCG@5:0.3059) [0.5 s] *
+INFO:root:Epoch 4     loss=0.1747 [5.3 s]	dev=(HR@5:0.4132,NDCG@5:0.3067) [0.5 s] *
+INFO:root:Epoch 5     loss=0.1274 [5.4 s]	dev=(HR@5:0.4160,NDCG@5:0.3105) [0.5 s] *
+INFO:root:Epoch 6     loss=0.0976 [5.5 s]	dev=(HR@5:0.4141,NDCG@5:0.3099) [0.4 s]
+INFO:root:Epoch 7     loss=0.0802 [5.8 s]	dev=(HR@5:0.4148,NDCG@5:0.3129) [0.5 s] *
+INFO:root:Epoch 8     loss=0.0698 [6.7 s]	dev=(HR@5:0.4123,NDCG@5:0.3091) [0.6 s]
+INFO:root:Epoch 9     loss=0.0608 [7.0 s]	dev=(HR@5:0.4104,NDCG@5:0.3087) [0.5 s]
+INFO:root:Epoch 10    loss=0.0568 [6.9 s]	dev=(HR@5:0.4097,NDCG@5:0.3075) [0.6 s]
+INFO:root:Epoch 11    loss=0.0492 [7.0 s]	dev=(HR@5:0.4026,NDCG@5:0.3028) [0.6 s]
+INFO:root:Epoch 12    loss=0.0449 [6.9 s]	dev=(HR@5:0.4061,NDCG@5:0.3088) [0.6 s]
+INFO:root:Epoch 13    loss=0.0437 [6.7 s]	dev=(HR@5:0.4034,NDCG@5:0.3048) [0.6 s]
+INFO:root:Epoch 14    loss=0.0413 [6.9 s]	dev=(HR@5:0.3986,NDCG@5:0.3023) [0.6 s]
+INFO:root:Epoch 15    loss=0.0426 [7.0 s]	dev=(HR@5:0.3963,NDCG@5:0.2983) [0.5 s]
+INFO:root:Epoch 16    loss=0.0388 [6.9 s]	dev=(HR@5:0.3939,NDCG@5:0.2960) [0.6 s]
+INFO:root:Early stop at 16 based on dev result.
+INFO:root:
+Best Iter(dev)=    7	 dev=(HR@5:0.4148,NDCG@5:0.3129) [109.9 s] 
+INFO:root:Load model from ../model/TiSASRec/TiSASRec__Grocery_and_Gourmet_Food__0__lr=0.001__l2=1e-06__emb_size=64__num_layers=1__num_heads=4__time_max=512.pt
+INFO:root:
+Dev  After Training: (HR@5:0.4148,NDCG@5:0.3129,HR@10:0.5078,NDCG@10:0.3429,HR@20:0.6194,NDCG@20:0.3710,HR@50:0.8148,NDCG@50:0.4096)
+INFO:root:
+Test After Training: (HR@5:0.3711,NDCG@5:0.2722,HR@10:0.4690,NDCG@10:0.3038,HR@20:0.5845,NDCG@20:0.3329,HR@50:0.7864,NDCG@50:0.3727)
+INFO:root:Saving top-100 recommendation results to: ../log/TiSASRec/TiSASRec__Grocery_and_Gourmet_Food__0__lr=0/rec-TiSASRec-dev.csv
+INFO:root:dev Prediction results saved!
+INFO:root:Saving top-100 recommendation results to: ../log/TiSASRec/TiSASRec__Grocery_and_Gourmet_Food__0__lr=0/rec-TiSASRec-test.csv
+INFO:root:test Prediction results saved!
+INFO:root:
+--------------------------------------------- END: 2025-10-28 15:56:06 ---------------------------------------------

@@ -58,30 +58,11 @@ def main():
 	corpus_path = os.path.join(args.path, args.dataset, model_name.reader+args.data_appendix+ '.pkl')
 	if not args.regenerate and os.path.exists(corpus_path):
 		logging.info('Load corpus from {}'.format(corpus_path))
-		try:
-			with open(corpus_path, 'rb') as f: #修改了适配pandas版本的问题
-				corpus = pickle.load(f)
-		except ModuleNotFoundError as e:
-			# Common when pickle references moved/removed pandas internals in newer pandas versions
-			logging.warning('pickle.load failed with ModuleNotFoundError: %s', e)
-			logging.info('Try loading with pandas.read_pickle as a fallback...')
-			try:
-				import pandas as _pd
-				corpus = _pd.read_pickle(corpus_path)
-				logging.info('Loaded corpus with pandas.read_pickle')
-			except Exception as e2:
-				logging.error('pandas.read_pickle failed: %s', e2)
-				logging.error('Please run with --regenerate 1 to rebuild the corpus from raw data or install a pandas version compatible with the pickle.')
-				raise
-		except Exception as e:
-			logging.error('Failed to load corpus pickle: %s', e)
-			logging.error('Please run with --regenerate 1 to rebuild the corpus from raw data.')
-			raise
+		corpus = pickle.load(open(corpus_path, 'rb'))
 	else:
 		corpus = reader_name(args)
 		logging.info('Save corpus to {}'.format(corpus_path))
-		with open(corpus_path, 'wb') as f:
-			pickle.dump(corpus, f)
+		pickle.dump(corpus, open(corpus_path, 'wb'))
 
 	# Define model
 	model = model_name(args, corpus).to(args.device)

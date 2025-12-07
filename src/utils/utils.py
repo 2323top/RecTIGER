@@ -62,7 +62,7 @@ def format_metric(result_dict: Dict[str, Any]) -> str:
 		for metric in np.sort(metrics):
 			name = '{}@{}'.format(metric, topk)
 			m = result_dict[name] if topk != 'All' else result_dict[metric]
-			# Use isinstance with numpy scalar base classes for compatibility across NumPy versions #修改了numpy的一些
+			# Use isinstance with numpy scalar base classes for compatibility across NumPy versions
 			if isinstance(m, (float, np.floating)):
 				format_str.append('{}:{:<.4f}'.format(name, float(m)))
 			elif isinstance(m, (int, np.integer)):

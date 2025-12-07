@@ -139,7 +139,7 @@ class BaseModel(nn.Module):
 					tmp_list = [len(d[key]) for d in feed_dicts]
 					if any([tmp_list[0] != l for l in tmp_list]):
 						# Use builtin `object` instead of deprecated `np.object` for compatibility with newer NumPy
-						stack_val = np.array([d[key] for d in feed_dicts], dtype=object) #修改了numpy的object
+						stack_val = np.array([d[key] for d in feed_dicts], dtype=object)
 					else:
 						stack_val = np.array([d[key] for d in feed_dicts])
 				else:

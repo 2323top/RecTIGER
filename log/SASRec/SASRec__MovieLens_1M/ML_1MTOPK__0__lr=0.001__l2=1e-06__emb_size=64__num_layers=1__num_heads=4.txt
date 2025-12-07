@@ -1,0 +1,90 @@
+INFO:root:Namespace(model_name='SASRec', model_mode='')
+INFO:root:--------------------------------------------- BEGIN: 2025-10-28 15:52:29 ---------------------------------------------
+INFO:root:
+===========================================
+ Arguments          | Values               
+===========================================
+ batch_size         | 256                 
+ data_appendix      |                     
+ dataset            | MovieLens_1M/ML_1...
+ dropout            | 0                   
+ early_stop         | 10                  
+ emb_size           | 64                  
+ epoch              | 200                 
+ eval_batch_size    | 256                 
+ gpu                | 0                   
+ history_max        | 20                  
+ l2                 | 1e-06               
+ lr                 | 0.001               
+ main_metric        |                     
+ num_heads          | 4                   
+ num_layers         | 1                   
+ num_neg            | 1                   
+ num_workers        | 5                   
+ optimizer          | Adam                
+ random_seed        | 0                   
+ save_final_results | 1                   
+ test_all           | 0                   
+ topk               | 5,10,20,50          
+===========================================
+INFO:root:Device: cuda
+INFO:root:Load corpus from ../data/MovieLens_1M/ML_1MTOPK/SeqReader.pkl
+INFO:root:#params: 222464
+INFO:root:SASRec(
+  (i_embeddings): Embedding(3126, 64)
+  (p_embeddings): Embedding(21, 64)
+  (transformer_block): ModuleList(
+    (0): TransformerLayer(
+      (masked_attn_head): MultiHeadAttention(
+        (q_linear): Linear(in_features=64, out_features=64, bias=True)
+        (k_linear): Linear(in_features=64, out_features=64, bias=True)
+        (v_linear): Linear(in_features=64, out_features=64, bias=True)
+      )
+      (layer_norm1): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+      (dropout1): Dropout(p=0, inplace=False)
+      (linear1): Linear(in_features=64, out_features=64, bias=True)
+      (linear2): Linear(in_features=64, out_features=64, bias=True)
+      (layer_norm2): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+      (dropout2): Dropout(p=0, inplace=False)
+    )
+  )
+)
+INFO:root:Test Before Training: (HR@5:0.0529,NDCG@5:0.0287,HR@10:0.1096,NDCG@10:0.0468,HR@20:0.2070,NDCG@20:0.0711,HR@50:0.4927,NDCG@50:0.1271)
+INFO:root:Optimizer: Adam
+INFO:root:Epoch 1     loss=0.2469 [15.8 s]	dev=(HR@5:0.4594,NDCG@5:0.3206) [0.2 s] *
+INFO:root:Epoch 2     loss=0.1536 [15.1 s]	dev=(HR@5:0.4820,NDCG@5:0.3356) [0.2 s] *
+INFO:root:Epoch 3     loss=0.1325 [15.1 s]	dev=(HR@5:0.4934,NDCG@5:0.3467) [0.2 s] *
+INFO:root:Epoch 4     loss=0.1221 [15.2 s]	dev=(HR@5:0.4879,NDCG@5:0.3442) [0.2 s]
+INFO:root:Epoch 5     loss=0.1158 [14.9 s]	dev=(HR@5:0.4934,NDCG@5:0.3541) [0.2 s] *
+INFO:root:Epoch 6     loss=0.1104 [15.5 s]	dev=(HR@5:0.4957,NDCG@5:0.3564) [0.2 s] *
+INFO:root:Epoch 7     loss=0.1063 [24.1 s]	dev=(HR@5:0.5035,NDCG@5:0.3579) [0.2 s] *
+INFO:root:Epoch 8     loss=0.1034 [27.2 s]	dev=(HR@5:0.5090,NDCG@5:0.3582) [0.3 s] *
+INFO:root:Epoch 9     loss=0.1008 [33.3 s]	dev=(HR@5:0.5027,NDCG@5:0.3531) [0.3 s]
+INFO:root:Epoch 10    loss=0.0981 [32.4 s]	dev=(HR@5:0.5062,NDCG@5:0.3574) [0.2 s]
+INFO:root:Epoch 11    loss=0.0960 [21.9 s]	dev=(HR@5:0.5086,NDCG@5:0.3626) [0.2 s] *
+INFO:root:Epoch 12    loss=0.0942 [16.7 s]	dev=(HR@5:0.5039,NDCG@5:0.3609) [0.2 s]
+INFO:root:Epoch 13    loss=0.0915 [15.0 s]	dev=(HR@5:0.5129,NDCG@5:0.3664) [0.1 s] *
+INFO:root:Epoch 14    loss=0.0907 [15.2 s]	dev=(HR@5:0.5137,NDCG@5:0.3694) [0.2 s] *
+INFO:root:Epoch 15    loss=0.0896 [15.1 s]	dev=(HR@5:0.5090,NDCG@5:0.3644) [0.2 s]
+INFO:root:Epoch 16    loss=0.0892 [14.9 s]	dev=(HR@5:0.5117,NDCG@5:0.3665) [0.2 s]
+INFO:root:Epoch 17    loss=0.0874 [14.8 s]	dev=(HR@5:0.5094,NDCG@5:0.3619) [0.2 s]
+INFO:root:Epoch 18    loss=0.0862 [14.7 s]	dev=(HR@5:0.4957,NDCG@5:0.3576) [0.2 s]
+INFO:root:Epoch 19    loss=0.0856 [14.7 s]	dev=(HR@5:0.5043,NDCG@5:0.3594) [0.2 s]
+INFO:root:Epoch 20    loss=0.0847 [14.7 s]	dev=(HR@5:0.5105,NDCG@5:0.3691) [0.2 s]
+INFO:root:Epoch 21    loss=0.0834 [14.7 s]	dev=(HR@5:0.5160,NDCG@5:0.3654) [0.2 s]
+INFO:root:Epoch 22    loss=0.0824 [14.8 s]	dev=(HR@5:0.5031,NDCG@5:0.3590) [0.2 s]
+INFO:root:Epoch 23    loss=0.0825 [14.7 s]	dev=(HR@5:0.5078,NDCG@5:0.3592) [0.2 s]
+INFO:root:Early stop at 23 based on dev result.
+INFO:root:
+Best Iter(dev)=   14	 dev=(HR@5:0.5137,NDCG@5:0.3694) [416.1 s] 
+INFO:root:Load model from ../model/SASRec/SASRec__MovieLens_1M/ML_1MTOPK__0__lr=0.001__l2=1e-06__emb_size=64__num_layers=1__num_heads=4.pt
+INFO:root:
+Dev  After Training: (HR@5:0.5137,NDCG@5:0.3694,HR@10:0.6624,NDCG@10:0.4174,HR@20:0.8048,NDCG@20:0.4534,HR@50:0.9504,NDCG@50:0.4826)
+INFO:root:
+Test After Training: (HR@5:0.5177,NDCG@5:0.3834,HR@10:0.6705,NDCG@10:0.4326,HR@20:0.8100,NDCG@20:0.4678,HR@50:0.9534,NDCG@50:0.4967)
+INFO:root:Saving top-100 recommendation results to: ../log/SASRec/SASRec__MovieLens_1M/ML_1MTOPK__0__lr=0/rec-SASRec-dev.csv
+INFO:root:dev Prediction results saved!
+INFO:root:Saving top-100 recommendation results to: ../log/SASRec/SASRec__MovieLens_1M/ML_1MTOPK__0__lr=0/rec-SASRec-test.csv
+INFO:root:test Prediction results saved!
+INFO:root:
+--------------------------------------------- END: 2025-10-28 15:59:30 ---------------------------------------------
