@@ -7,6 +7,8 @@
 [![Framework: ReChorus](https://img.shields.io/badge/Framework-ReChorus_2.0-red)](https://github.com/THUwangcy/ReChorus)
 [![Paper: NeurIPS 2023](https://img.shields.io/badge/Paper-TIGER-green)](https://arxiv.org/abs/2305.05065)
 
+
+
 ## 📖 简介
 
 **RecTIGER** 是基于清华大学 [ReChorus 2.0](https://github.com/THUwangcy/ReChorus) 框架扩展的推荐系统研究项目。本项目的主要目标是复现 NeurIPS 2023 论文 **"Recommender Systems with Generative Retrieval" (TIGER)**，将生成式检索范式（Generative Retrieval）引入到通用的序列推荐框架中。
@@ -15,6 +17,7 @@
 
 本项目保留了 TIGER 语义索引的核心特性，同时无缝接入 ReChorus 的数据管道、训练器和评估模块，并添加了 **Label Smoothing** 等优化策略。
 
+![TIGER原理框架](./docs/_static/TIGER.png)
 ## ✨ 核心亮点
 
 *   **无缝集成**：基于 ReChorus 的 `Reader/Runner/Model` 模块化架构重构，复用框架的高效数据加载与 Top-K 评估流程。
@@ -28,8 +31,9 @@
 
 ```text
 src/
-├── models/
-│   └── TIGER.py             # TIGER 模型核心实现 (继承自 SequentialModel)
+├── models/                  #包含ReChorus原生模型
+│   └── sequential/
+│       └── TIGER.py         # TIGER 模型核心实现 (继承自 SequentialModel)
 ├── helpers/
 │   ├── TIGERReader.py       # 专用数据读取器，处理语义 ID (.npy) 加载与映射
 │   ├── TIGERRunner.py       # 专用运行器，保留生成任务扩展接口
@@ -37,9 +41,9 @@ src/
 ├── main.py                  # 统一入口
 └── ...
 data/
-└── Grocery_and_Gourmet_Food/
-    ├── Grocery_and_Gourmet_Food.inter  # 原始交互数据
-    └── item_codes.npy                  # (可选) RQ-VAE 生成的物品语义编码
+├── Grocery_and_Gourmet_Food/ #本实验使用数据集
+└──MovieLens_1M/
+   └──ML_1MTOPK/              #本实验使用数据集
 ```
 
 ## 🚀 快速开始
@@ -49,9 +53,8 @@ data/
 本项目依赖 PyTorch 与 Transformers 库。
 
 ```bash
-# 创建虚拟环境
-python -m venv .venv
-source .venv/bin/activate
+#下载项目
+git clone git@github.com:2323top/RecTIGER.git
 
 # 安装依赖
 pip install -r requirements.txt
@@ -61,7 +64,7 @@ pip install transformers
 
 ### 2. 数据准备
 
-请遵循 ReChorus 的标准数据格式（csv/txt），将数据放置在 `data/<DatasetName>/` 目录下。
+请遵循 ReChorus 的标准数据格式（csv/txt），将数据放置在 `data/<DatasetName>/` 目录下。（本项目已配置好，可直接使用，无需额外运行）
 
 **关于语义 ID (Semantic IDs):**
 TIGER 依赖 RQ-VAE 生成的离散码本作为物品 ID。
@@ -73,27 +76,19 @@ TIGER 依赖 RQ-VAE 生成的离散码本作为物品 ID。
 使用命令行参数直接启动训练，以下是在 Amazon Grocery 数据集上的示例命令：
 
 ```bash
-python main.py \
-    --model_name TIGER \
-    --dataset Grocery_and_Gourmet_Food \
-    --lr 1e-3 \
-    --l2 1e-6 \
-    --emb_size 64 \
-    --num_layers 2 \
-    --history_max 20 \
-    --codebook_k 256 \
-    --num_codebooks 4 \
-    --tiger_code_path item_codes.npy \
-    --label_smoothing 0.1 \
-    --gpu 0
-```
+# 切换到项目入口目录
+cd src
 
-**关键参数说明：**
-*   `--tiger_code_path`: 语义编码文件路径（可选，若不传则自动搜索）。
-*   `--codebook_k`: 码本大小（默认 256）。
-*   `--num_codebooks`: 每个物品对应的 Token 数量（语义 ID 长度，默认 4）。
-*   `--label_smoothing`: 解码器训练时的标签平滑系数（我们的改进点，建议设为 0.1）。
-*   `--beam_size`: 推理时的集束搜索宽度（默认 30）。
+# windows上运行
+python main.py --model_name TIGER --emb_size 64 --lr 1e-3 --l2 1e-6 --dataset Grocery_and_Gourmet_Food --gpu 0 --num_workers 0 --regenerate 1
+
+# linux上运行
+python main.py --model_name TIGER --emb_size 64 --lr 1e-3 --l2 1e-6 --dataset Grocery_and_Gourmet_Food --gpu 0 --regenerate 1
+
+#以上是原项目复现版本，以下为我们加入平滑项后的改进版本
+python main.py --model_name TIGER --emb_size 64 --lr 1e-3 --l2 1e-6 --dataset Grocery_and_Gourmet_Food --gpu 0 --label_smoothing 0.2
+
+```
 
 ## 🧠 模型详解
 
@@ -103,7 +98,6 @@ TIGER 的工作流程分为两阶段：
 
 1.  **Semantic ID 生成 (离线)**:
     利用 **RQ-VAE (Residual-Quantized Variational AutoEncoder)** 对物品的文本内容（标题、描述等）进行编码。通过残差量化，每个物品被映射为一个由 $m$ 个离散码字组成的元组 $(c_1, c_2, ..., c_m)$。
-    > *注：本项目主要关注第二阶段，即在线推荐部分，默认假设语义 ID 已通过 RQ-VAE 生成。*
 
 2.  **生成式检索 (在线)**:
     *   **Encoder**: 将用户交互历史中的物品替换为对应的 Semantic ID 序列，输入 Transformer 编码器。
@@ -112,31 +106,29 @@ TIGER 的工作流程分为两阶段：
 
 ### 改进点：Label Smoothing
 
-针对生成式检索在稀疏数据上容易“过度自信”导致过拟合的问题，我们在计算交叉熵损失时引入了 Label Smoothing：
+观察到 TIGER 训练中存在缓慢收敛的情况，参考 Transformer 等序列任务常用的 Label Smoothing（LS），我们尝试在 decoder 端对目标分布做平滑，缓解过拟合并加快收敛。
+我们将 decoder 目标分布从 one-hot y平滑为 ：
 
-$$ \mathcal{L} = (1 - \epsilon) \cdot \text{CE}(p, y) + \epsilon \cdot \text{Uniform}(K) $$
+$$
+\mathbf{y}^{\text{(ls)}} = (1 - \epsilon) \cdot \mathbf{y} + \epsilon \cdot \frac{1}{V}
+$$
 
-实验表明，设置 `epsilon=0.1` 能在 Grocery 数据集上带来显著的性能提升。
+其中 V 是词表大小，ϵ 为 label smoothing 系数。训练损失仍是 token-level 交叉熵，但用 y′替代 one-hot，并忽略 PAD token。本实验固定其余训练设置不变，仅取 ϵ∈{0,0.1,0.2} 做三个对比实验。
+实验结果（如下图）表明，设置 `epsilon=0.2` 能在 Grocery 数据集上带来一定的性能提升且训练收敛速度更快。
+![改进模型效果](./docs/_static/smoothing_comparison.png)
 
 ## 📊 实验结果
 
-我们在 **Amazon Grocery** (稀疏) 和 **MovieLens-1M** (稠密) 数据集上进行了对比实验。
+我们在 **Amazon Grocery** (稀疏) 和 **MovieLens-1M** (稠密) 数据集上进行了对比实验，此处仅展示前者。
 
-| Dataset | Model | HR@5 | NDCG@5 | HR@10 | NDCG@10 |
-| :--- | :--- | :---: | :---: | :---: | :---: |
-| **Grocery** | GRU4Rec | 0.3710 | 0.2655 | 0.4763 | 0.2995 |
-| | SASRec | 0.3729 | 0.2726 | 0.4684 | 0.3032 |
-| | **TIGER** | **0.3934** | **0.2973** | **0.4855** | **0.3270** |
-| **ML-1M** | **SASRec** | **0.5177** | **0.3834** | **0.6705** | **0.4326** |
-| | TIGER | 0.1371 | 0.0816 | 0.2265 | 0.1101 |
+| Dataset | Model | HR@5 | NDCG@5 | HR@10 | NDCG@10 | HR@20 | NDCG@20 | HR@50 | NDCG@50 |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Grocery** | GRU4Rec | 0.3710 | 0.2655 | 0.4763 | 0.2995 | 0.6041 | 0.3317 | 0.8187 | 0.3743 |
+| | SASRec | 0.3729 | 0.2726 | 0.4684 | 0.3032 | 0.5763 | 0.3304 | 0.7810 | 0.3708 |
+| | TIGER | **0.3934** | **0.2973** | **0.4855** | **0.3270** | **0.6016** | **0.3562** | **0.7938** | **0.3942** |
 
-**结论：** TIGER 在具有丰富语义且交互稀疏的场景下（Grocery）表现出 SOTA 性能，验证了语义索引的有效性；但在纯协同过滤信号主导的稠密场景下（ML-1M），单纯基于内容的生成式检索仍存在局限。
+**结论：** TIGER 在具有丰富语义且交互稀疏的场景下（Grocery）表现出 SOTA 性能，验证了语义索引的有效性。
 
-## 🤝 开发与贡献
-
-欢迎提交 Issue 或 Pull Request：
-*   **Bug 反馈**：请附带完整的参数设置和错误日志。
-*   **功能扩展**：欢迎贡献针对 RQ-VAE 的在线训练模块或新的解码策略（如 Trie 约束解码）。
 
 ## 🔗 引用
 
