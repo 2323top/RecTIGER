@@ -1,4 +1,3 @@
-```markdown
 # RecTIGER
 
 [![Python Version](https://img.shields.io/badge/python-3.10-blue)]()
@@ -112,4 +111,3 @@ TIGER 模型要点（占位，替换为模型具体描述）
 - 在 docs/ 中加入 TIGER 设计文档与超参数敏感性分析
 - 将模型实现路径、API 调用示例和 checkpoint 下载链接写入 README
 
-```
