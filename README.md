@@ -1,154 +1,115 @@
-![logo](./docs/_static/logo2.0.png)
----
+```markdown
+# RecTIGER
 
-![PyPI - Python Version](https://img.shields.io/badge/pyhton-3.10-blue) 
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
-![GitHub repo size](https://img.shields.io/github/repo-size/THUwangcy/ReChorus) 
-[![arXiv](https://img.shields.io/badge/arXiv-ReChorus-%23B21B1B)](https://arxiv.org/abs/2405.18058)
+[![Python Version](https://img.shields.io/badge/python-3.10-blue)]()
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+[![arXiv: ReChorus2.0](https://img.shields.io/badge/arXiv-ReChorus-%23B21B1B)](https://arxiv.org/abs/2405.18058)
 
+简介
+--
+RecTIGER 是在 ReChorus2.0 框架基础上扩展的推荐研究库。本仓库的主要工作是将新提出的 TIGER（Targeted/Temporal/Transformer-oriented/Graph/ENhanced/Ranker —— 根据实际含义替换）模型接入到 ReChorus 中，提供模型实现、训练/评估脚本、示例配置与基准实验记录，便于研究人员在统一框架下比较与复现 TIGER 与其他模型的表现。
 
-ReChorus2.0 is a modular and task-flexible PyTorch library for recommendation, especially for research purpose. It aims to provide researchers a flexible framework to implement various recommendation tasks, compare different algorithms, and adapt to diverse and highly-customized data inputs. We hope ReChorus2.0 can serve as a more convinient and user-friendly tool for researchers, so as to form a "Chorus" of recommendation tasks and algorithms.
+核心亮点
+--
+- 基于 ReChorus2.0 的模块化架构（Reader / Runner / Model），方便复用已有数据预处理与评测流程。
+- 新增 TIGER 模型实现（src/models/tiger/TIGER.py）并与 ReChorus 的训练/评估流水线无缝对接。
+- 示例配置与 demo 脚本：configs/tiger/*.yaml, scripts/run_tiger.sh（占位，请填入实际文件）。
+- 支持的任务：Top-k 推荐、CTR 预测、Impression-based reranking（与 ReChorus 原任务对齐）。
+- 高效训练：多线程数据准备、GPU 加速兼容、可接入已有评估优化器与损失函数。
 
-The previous version of ReChorus can be found at [ReChorus1.0](https://github.com/THUwangcy/ReChorus/tree/ReChorus1.0)
+示意结构
+--
+- src/
+  - models/
+    - tiger/               # TIGER 模型实现与辅助模块
+      - TIGER.py
+      - tiger_utils.py
+  - helpers/
+    - BaseReader.py
+    - BaseRunner.py
+    - BaseModel.py
+  - configs/
+    - tiger/               # TIGER 的默认配置（超参 / 网络结构 / 优化器等）
+- data/                    # 数据与预处理示例
+- docs/                    # 文档与 demo 结果
+- scripts/                 # 快速运行脚本（demo / 训练 / 评估）
 
-## What's New in ReChorus2.0:
-
-- **New Tasks**: Newly supporting the context-aware top-k recommendation and CTR prediction task. Newly supporting the Impression-based re-ranking task.
-- **New Models**: Adding Context-aware Recommenders and Impression-based Re-ranking Models. Listed below.
-- **New dataset format**: Supporting various contextual feature input. Customizing candidate item lists in training and evaluation. Supporting variable length positive and negative samples.
-- **Task Flexible**: Each model can serve for different tasks, and task switching is conveniently achieved by altering *model mode*.
-  
-
-This framework is especially suitable for researchers to choose or implement desired experimental settings, and compare algorithms under the same setting. The characteristics of our framework can be summarized as follows:
-
-- **Modular**: primary functions modularized into distinct components: runner, model, and reader, facilitating code comprehension and integration of new features.
-  
-- **Swift**: concentrate on your model design ***in a single file*** and implement new models quickly.
-
-- **Efficient**: multi-thread batch preparation, special implementations for the evaluation, and around 90% GPU utilization during training for deep models.
-
-- **Flexible**: implement new readers or runners for different datasets and experimental settings, and each model can be assigned with specific helpers.
-
-## Structure
-
-Generally, ReChorus decomposes the whole process into three modules:
-
-- [Reader](https://github.com/THUwangcy/ReChorus/tree/master/src/helpers/BaseReader.py): read dataset into DataFrame and append necessary information to each instance
-- [Runner](https://github.com/THUwangcy/ReChorus/tree/master/src/helpers/BaseRunner.py): control the training process and model evaluation, including evaluation metrics.
-- [Model](https://github.com/THUwangcy/ReChorus/tree/master/src/models/BaseModel.py): define how to generate output (predicted labels or ranking scores) and prepare batches.
-
-![logo](./docs/_static/module_new.png)
-
-## Requirements & Getting Started
-See in the doc for [Requirements & Getting Started](https://github.com/THUwangcy/ReChorus/tree/master/docs/Getting_Started.md).
-
-## Tasks & Settings
-
-The tasks & settings are listed below
-
-<table>
-<tr><th> Tasks </th><th> Runner </th><th> Metrics </th><th> Loss Functions</th><th> Reader </th><th> BaseModel </th><th> Models</th><th> Model Modes </th></tr>
-<tr><td rowspan="3"> Top-k Recommendation </td><td rowspan="3"> BaseRunner </td><td rowspan="3"> HitRate NDCG </td><td rowspan="3"> BPR </td><td> BaseReader </td><td> BaseModel.GeneralModel </td><td> general </td><td> '' </td></tr>
-<tr><td> SeqReader </td><td> BaseModel.SequentialModel </td><td> sequential </td><td> '' </td></tr>
-<tr><td> ContextReader </td><td> BaseContextModel.ContextModel </td><td> context </td><td> 'TopK' </td></tr>
-<tr><td> CTR Prediction </td><td> CTRRunner </td><td> AUC Logloss </td><td> BPR, BCE </td><td> ContextReader </td><td> BaseContextModel.ContextCTRModel </td><td> context </td><td> 'CTR' </td></tr>
-<tr><td rowspan="4"> Impression-based Ranking </td><td rowspan="4"> ImpressionRunner </td><td rowspan="4"> HitRate NDCG MAP </td><td rowspan="4"> List-level BPR, Listnet loss, Softmax cross entropy loss, Attention rank </td><td> ImpressionReader </td><td> BaseImpressionModel.ImpressionModel </td><td> general </td><td> 'Impression' </td></tr>
-<tr><td> ImpressionSeqReader </td><td> BaseImpressionModel.ImpressionSeqModel </td><td> sequential </td><td> 'Impression' </td></tr>
-<tr><td> ImpressionReader </td><td> BaseRerankerModel.RerankModel </td><td> reranker </td><td> 'General' </td></tr>
-<tr><td> ImpressionSeqReader </td><td> BaseRerankerModel.RerankSeqModel </td><td> reranker </td><td> 'Sequential' </td></tr>
-</table>
-
-
-## Arguments
-See in the doc for [Main Arguments](https://github.com/THUwangcy/ReChorus/tree/master/docs/Main_Arguments.md).
-
-## Models
-See in the doc for [Supported Models](https://github.com/THUwangcy/ReChorus/tree/master/docs/Supported_Models.md).
-
-Experimental results and corresponding configurations are shown in [Demo Script Results](https://github.com/THUwangcy/ReChorus/tree/master/docs/demo_scripts_results/README.md).
-
-
-## Citation
-
-**If you find ReChorus is helpful to your research, please cite either of the following papers. Thanks!**
-
-```
-@inproceedings{li2024rechorus2,
-  title={ReChorus2. 0: A Modular and Task-Flexible Recommendation Library},
-  author={Li, Jiayu and Li, Hanyu and He, Zhiyu and Ma, Weizhi and Sun, Peijie and Zhang, Min and Ma, Shaoping},
-  booktitle={Proceedings of the 18th ACM Conference on Recommender Systems},
-  pages={454--464},
-  year={2024}
-}
-```
-```
-@inproceedings{wang2020make,
-  title={Make it a chorus: knowledge-and time-aware item modeling for sequential recommendation},
-  author={Wang, Chenyang and Zhang, Min and Ma, Weizhi and Liu, Yiqun and Ma, Shaoping},
-  booktitle={Proceedings of the 43rd International ACM SIGIR Conference on Research and Development in Information Retrieval},
-  pages={109--118},
-  year={2020}
-}
-```
-```
-@article{王晨阳2021rechorus,
-  title={ReChorus: 一个综合, 高效, 易扩展的轻量级推荐算法框架},
-  author={王晨阳 and 任一 and 马为之 and 张敏 and 刘奕群 and 马少平},
-  journal={软件学报},
-  volume={33},
-  number={4},
-  pages={0--0},
-  year={2021}
-}
-```
-
-This is also our public implementation for the following papers (codes and datasets to reproduce the results can be found at corresponding branch):
-
-
-- *Chenyang Wang, Min Zhang, Weizhi Ma, Yiqun Liu, and Shaoping Ma. [Make It a Chorus: Knowledge- and Time-aware Item Modeling for Sequential Recommendation](http://www.thuir.cn/group/~mzhang/publications/SIGIR2020Wangcy.pdf). In SIGIR'20.*
-
+快速开始
+--
+1. 环境（示例）
 ```bash
-git clone -b SIGIR20 https://github.com/THUwangcy/ReChorus.git
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 ```
 
-- *Chenyang Wang, Weizhi Ma, Min Zhang, Chong Chen, Yiqun Liu, and Shaoping Ma. [Towards Dynamic User Intention: Temporal Evolutionary Effects of Item Relations in Sequential Recommendation](https://chenchongthu.github.io/files/TOIS-KDA-wcy.pdf). In TOIS'21.*
+2. 下载并准备数据（示例）
+- 请参考 data/README.md 以准备 Top-k / CTR / Impression 数据。
+- 若使用示例 Amazon/MIND/MovieLens 数据，请把预处理后的文件放到 data/<DATASET>/ 下。
 
+3. 运行 TIGER demo（占位命令，请根据实际脚本替换）
 ```bash
-git clone -b TOIS21 https://github.com/THUwangcy/ReChorus.git
+# 训练示例
+python main.py --config configs/tiger/tiger_topk.yaml --task topk --model TIGER
+
+# 评估示例
+python main.py --config configs/tiger/tiger_topk.yaml --task topk --model TIGER --eval_only 1 --checkpoint path/to/checkpoint.pt
 ```
 
-- *Chenyang Wang, Weizhi Ma, Chong, Chen, Min Zhang, Yiqun Liu, and Shaoping Ma. [Sequential Recommendation with Multiple Contrast Signals](https://dl.acm.org/doi/pdf/10.1145/3522673). In TOIS'22.*
+配置说明
+--
+- configs/tiger/*.yaml 包含：
+  - model.architecture: 模型结构相关字段（层数、维度、注意力 heads 等）
+  - training.optimizer: 优化器与学习率
+  - training.batch_size, training.epochs
+  - data.reader: 指定使用的 Reader（BaseReader / SeqReader / ContextReader 等）
+  - task.mode: topk / ctr / rerank
+- 在 README 中保留常用参数表与推荐默认值（请将实验中使用的最终参数填入下表）。
 
-```bash
-git clone -b TOIS22 https://github.com/THUwangcy/ReChorus.git
+TIGER 模型要点（占位，替换为模型具体描述）
+--
+- 模型核心思想：说明 TIGER 的组成（例如：Transformer 编码器 + 时序增强模块 + 图关系融合 + 目标蒸馏/对比损失）
+- 输入/输出格式：模型期望的特征（user_id, item_seq, item_meta, timestamps, candidate_list 等）
+- 训练损失：List-wise / BPR / BCE / Softmax 等（写明默认组合）
+- 已实现文件：src/models/tiger/TIGER.py（主类）、src/models/tiger/README.md（实现细节与数学式）
+
+数据格式（沿用 ReChorus 规范）
+--
+见 data/README.md（项目已保留原有数据格式说明）。简要：
+- Top-k train.csv: user_id \t item_id \t time
+- test/dev: user_id \t item_id \t time \t neg_items（或无 neg_items 则 test_all）
+- CTR: user_id \t item_id \t time \t label
+- Impression: user_id \t item_id \t time \t label \t impression_id
+- 可选：item_meta.csv, user_meta.csv, situation features（c_ 开头）
+
+示例与实验结果（占位）
+--
+- 在 docs/demo_scripts_results/ 中加入针对 TIGER 的训练曲线、性能表格（HR@K、NDCG@K、AUC、Logloss 等）。
+- 请将 demo 脚本与运行日志上传到 docs/ 并在此处引用。
+
+开发与贡献
+--
+欢迎以 Issue / PR 方式贡献：
+- 报告 bug（请附带复现步骤与最小可运行脚本）
+- 提交新的数据 reader、runner 或优化器
+- 补充 TIGER 的 ablation 配置与基线对比
+
+引用
+--
+如果本仓库或 TIGER 的实现对你的工作有帮助，请引用：
+- ReChorus2.0 论文：Li et al., ReChorus2.0 (arXiv)
+- 请在此补充 TIGER 原始论文引用（占位）
+
+许可证与联系
+--
+- 许可证: MIT（详见 LICENSE）
+- 联系: 项目维护者（占位：请填入邮箱或 GitHub 用户名）
+
+附录 — 待补充项（请在合并前完成）
+--
+- 填写 configs/tiger 下的完整 YAML 示例
+- 补充 scripts/run_tiger.sh、demo 数据与复现实验命令
+- 在 docs/ 中加入 TIGER 设计文档与超参数敏感性分析
+- 将模型实现路径、API 调用示例和 checkpoint 下载链接写入 README
+
 ```
-
-- *Chenyang Wang, Zhefan Wang, Yankai Liu, Yang Ge, Weizhi Ma, Min Zhang, Yiqun Liu, Junlan Feng, Chao Deng, and Shaoping Ma. [Target Interest Distillation for Multi-Interest Recommendation](). In CIKM'22.*
-
-```bash
-git clone -b CIKM22 https://github.com/THUwangcy/ReChorus.git
-```
-
-## Contact
-
-**ReChorus 1.0**: Chenyang Wang (THUwangcy@gmail.com)
-
-**ReChorus 2.0**: Jiayu Li (lijiayu997@gmail.com), Hanyu Li (l-hy12@outlook.com)
-
-<!-- MARKDOWN LINKS & IMAGES -->
-
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=flat-square
-[contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=flat-square
-[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=flat-square
-[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=flat-square
-[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=flat-square
-[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
-[product-screenshot]: images/screenshot.png
