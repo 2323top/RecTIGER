@@ -85,9 +85,11 @@ python main.py --model_name TIGER --emb_size 64 --lr 1e-3 --l2 1e-6 --dataset Gr
 # linux上运行
 python main.py --model_name TIGER --emb_size 64 --lr 1e-3 --l2 1e-6 --dataset Grocery_and_Gourmet_Food --gpu 0 --regenerate 1
 
-#以上是原项目复现版本，以下为我们加入平滑项后的改进版本
+#以上是原项目复现版本，以下为我们加入平滑项后的改进版本(linux)
 python main.py --model_name TIGER --emb_size 64 --lr 1e-3 --l2 1e-6 --dataset Grocery_and_Gourmet_Food --gpu 0 --label_smoothing 0.2
 
+# 改进版本（windows）
+python main.py --model_name TIGER --emb_size 64 --lr 1e-3 --l2 1e-6 --dataset Grocery_and_Gourmet_Food --gpu 0 --label_smoothing 0.2 --num_workers 0
 ```
 
 ## 🧠 模型详解
