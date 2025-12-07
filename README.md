@@ -6,14 +6,17 @@
 
 简介
 --
-RecTIGER 是在 ReChorus2.0 框架基础上扩展的推荐研究库。本仓库的主要工作是将新提出的 TIGER（Targeted/Temporal/Transformer-oriented/Graph/ENhanced/Ranker —— 根据实际含义替换）模型接入到 ReChorus 中，提供模型实现、训练/评估脚本、示例配置与基准实验记录，便于研究人员在统一框架下比较与复现 TIGER 与其他模型的表现。
+RecTIGER 是在 ReChorus2.0 框架基础上扩展的推荐系统研究库。本仓库的主要工作是将新提出的 TIGER（Transformer
+Index for GEnerative Recommenders ）模型接入到 ReChorus 中，提供模型实现、训练/评估脚本、示例配置与基准实验记录，便于研究人员在统一框架下比较与复现 TIGER 与其他模型的表现。\
+参考项目地址：\
+ReChorus：https://github.com/THUwangcy/ReChorus/tree/master \
+TIGER：https://github.com/EdoardoBotta/RQ-VAE-Recommender
 
 核心亮点
 --
 - 基于 ReChorus2.0 的模块化架构（Reader / Runner / Model），方便复用已有数据预处理与评测流程。
 - 新增 TIGER 模型实现（src/models/tiger/TIGER.py）并与 ReChorus 的训练/评估流水线无缝对接。
-- 示例配置与 demo 脚本：configs/tiger/*.yaml, scripts/run_tiger.sh（占位，请填入实际文件）。
-- 支持的任务：Top-k 推荐、CTR 预测、Impression-based reranking（与 ReChorus 原任务对齐）。
+- 支持的任务：Top-k 推荐（HR@k、NDCG@k评估）
 - 高效训练：多线程数据准备、GPU 加速兼容、可接入已有评估优化器与损失函数。
 
 示意结构
@@ -55,15 +58,6 @@ python main.py --config configs/tiger/tiger_topk.yaml --task topk --model TIGER
 python main.py --config configs/tiger/tiger_topk.yaml --task topk --model TIGER --eval_only 1 --checkpoint path/to/checkpoint.pt
 ```
 
-配置说明
---
-- configs/tiger/*.yaml 包含：
-  - model.architecture: 模型结构相关字段（层数、维度、注意力 heads 等）
-  - training.optimizer: 优化器与学习率
-  - training.batch_size, training.epochs
-  - data.reader: 指定使用的 Reader（BaseReader / SeqReader / ContextReader 等）
-  - task.mode: topk / ctr / rerank
-- 在 README 中保留常用参数表与推荐默认值（请将实验中使用的最终参数填入下表）。
 
 TIGER 模型要点（占位，替换为模型具体描述）
 --
